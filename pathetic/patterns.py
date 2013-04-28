@@ -1,6 +1,11 @@
 
 
 class ComponentGlobNode(object):
+  """
+  ComponentGlobNodes will match a path component that satisfy
+  the given glob.
+  """
+  
   def __init__(self, glob, child = None):
     self.__glob = glob
     self.child = child
@@ -31,6 +36,10 @@ class ComponentGlobNode(object):
 
 
 class ExpanderNode(object):
+  """
+  ExpanderNodes are intended to match zero or more path components.
+  """
+  
   def __init__(self, child = None):
     self.child = child
   
@@ -41,15 +50,30 @@ class ExpanderNode(object):
     return "ExpanderNode(child = %s)" % (repr(self.child), )
 
 
+class EndNode(object):
+  """
+  An EndNode represents that end of a pattern expression.
+  """
+  def accept_visitor(self, visitor):
+    return visitor.visit_EndNode(self)
+
+  def __repr__(self):
+    return "EndNode()"
+
+
 def split(pattern):
+  """
+  This function splits a pattern string into its components.
+  This is basically the first step in parsing the pattern.
+  """
   return [c for c in pattern.split('/') if c]
 
 
-def parse_pattern(pattern, ignore_case = False):
+def parse(pattern, ignore_case = False):
   if isinstance(pattern, basestring):
     pattern = split(pattern)
 
-  node = None
+  node = EndNode()
   for c in reversed(pattern):
     if c == "**":
       node = ExpanderNode(child = node)
