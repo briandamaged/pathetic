@@ -5,7 +5,7 @@ class SeperatorNode(object):
     self.child = child
   
   def accept_visitor(self, visitor):
-    return visitor.visit_PathSepNode(self)
+    return visitor.visit_SeperatorNode(self)
   
   def __repr__(self):
     return "SeperatorNode(value = %s, child = %s)" % (repr(self.value), repr(self.child))
@@ -28,5 +28,11 @@ class EndNode(object):
   
   def __repr__(self):
     return "EndNode()"
+
+
+
+
+
+
 
 
